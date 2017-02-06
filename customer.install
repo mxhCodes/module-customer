@@ -1,0 +1,199 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the customer module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function customer_schema() {
+  $schema['customer'] = array(
+    'description' => 'The base table for customers.',
+    'fields' => array(
+      'customer_id' => array(
+        'description' => 'The primary identifier for a customer.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'name' => array(
+        'description' => 'The name of the customer.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'created' => array(
+        'description' => 'The Unix timestamp when the customer was created.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'changed' => array(
+        'description' => 'The Unix timestamp when the customer was most recently saved.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'uid_created' => array(
+        'description' => 'The {users}.uid that created this customer.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'uid_changed' => array(
+        'description' => 'The {users}.uid that recently changed informations about this customer.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'uid_owner' => array(
+        'description' => 'The {users}.uid that owns this customer account.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'uuid' => array(
+        'type' => 'char',
+        'length' => 36,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'The Universally Unique Identifier.',
+      ),
+    ),
+    'unique keys' => array(
+      'name' => array('name'),
+    ),
+    'foreign keys' => array(
+      'customer_uid_created' => array(
+        'table' => 'users',
+        'columns' => array('uid_created' => 'uid'),
+      ),
+      'customer_uid_changed' => array(
+        'table' => 'users',
+        'columns' => array('uid_changed' => 'uid'),
+      ),      
+    ),
+    'primary key' => array('customer_id'),
+  );
+
+  return $schema;
+}
+
+/**
+ * Implements hook_install().
+ */
+function customer_install() {
+  customer_add_fields();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function customer_uninstall() {
+  field_attach_delete_bundle('customer', 'customer');
+}
+
+/**
+ * Adds default fields to the customer entity type.
+ */
+function customer_add_fields() {
+  field_cache_clear();
+  // Add or remove the email field, as needed.
+  $field = field_info_field('email');
+  $instance = field_info_instance('customer', 'email', 'customer');
+  if (empty($field)) {
+    $field = array(
+      'field_name' => 'email',
+      'type' => 'email',
+    );
+    $field = field_create_field($field);
+  }
+  if (empty($instance)) {
+    $instance = array(
+      'field_name' => 'email',
+      'entity_type' => 'customer',
+      'bundle' => 'customer',
+      'label' => t('Email address'),
+      'widget' => array('type' => 'email_textfield', 'weight' => 10,),
+    );
+    $instance = field_create_instance($instance);
+  }
+  // Add or remove the phone field, as needed.
+  $field = field_info_field('phone');
+  $instance = field_info_instance('customer', 'phone', 'customer');
+  if (empty($field)) {
+    $field = array(
+      'field_name' => 'phone',
+      'type' => 'text',
+    );
+    $field = field_create_field($field);
+  }
+  if (empty($instance)) {
+    $instance = array(
+      'field_name' => 'phone',
+      'entity_type' => 'customer',
+      'bundle' => 'customer',
+      'label' => t('Telephone number'),
+      'widget' => array('type' => 'text_textfield', 'weight' => 20,),
+      'settings' => array('max_length' => 255),
+    );
+    $instance = field_create_instance($instance);
+  }
+  // Add or remove the link field, as needed.
+  $field = field_info_field('link');
+  $instance = field_info_instance('customer', 'link', 'customer');
+  if (empty($field)) {
+    $field = array(
+      'field_name' => 'link',
+      'type' => 'link_field',
+    );
+    $field = field_create_field($field);
+  }
+  if (empty($instance)) {
+    $instance = array(
+      'field_name' => 'link',
+      'entity_type' => 'customer',
+      'bundle' => 'customer',
+      'label' => t('Link to web page'),
+      'widget' => array('type' => 'link_field', 'weight' => 30,),
+      'settings' => array(
+        'title' => 'none',
+        'attributes' => array('target' => '_blank'),
+      ),
+    );
+    $instance = field_create_instance($instance);
+  }
+  // Add or remove the address field, as needed.
+  $field = field_info_field('address');
+  $instance = field_info_instance('customer', 'address', 'customer');
+  if (empty($field)) {
+    $field = array(
+      'field_name' => 'address',
+      'type' => 'addressfield',
+    );
+    $field = field_create_field($field);
+  }
+  if (empty($instance)) {
+    $instance = array(
+      'field_name' => 'address',
+      'entity_type' => 'customer',
+      'bundle' => 'customer',
+      'label' => t('Address'),
+      'widget' => array(
+        'type' => 'addressfield_standard',
+        'weight' => 40,
+        'settings' => array(
+          'format_handlers' => array(
+            'address',
+            'organisation',
+            'name-full',
+          ),
+        ),
+      ),
+    );
+    $instance = field_create_instance($instance);
+  }
+}

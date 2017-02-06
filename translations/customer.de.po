@@ -1,0 +1,264 @@
+#
+# LANGUAGE translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  customer.pages.inc: n/a
+#  customer.module: n/a
+#  customer.info: n/a
+#  customer.install: n/a
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2013-09-25 21:24+0200\n"
+"PO-Revision-Date: 2013-09-25 21:25+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"X-Generator: Poedit 1.5.7\n"
+
+#: customer.pages.inc:14;319 customer.module:72
+msgid "Add new customer"
+msgstr "Konto erstellen"
+
+#: customer.pages.inc:54;233;255
+msgid "Name (Company or person)"
+msgstr "Name (Firma oder Person)"
+
+#: customer.pages.inc:66
+msgid "Save"
+msgstr ""
+
+#: customer.pages.inc:73;112
+msgid "Save and add another one"
+msgstr "Speichern und weiteres Konto hinzufügen"
+
+#: customer.pages.inc:81;181 customer.module:44;103
+msgid "Delete"
+msgstr ""
+
+#: customer.pages.inc:89
+msgid "Edit customer account @customer"
+msgstr "Kundenkonto für @customer bearbeiten"
+
+#: customer.pages.inc:110
+msgid "Customer information for %customer has been saved."
+msgstr "Kundeninformationen für %customer wurden gespeichert."
+
+#: customer.pages.inc:140
+msgid "This customer already exists."
+msgstr "Dieser Kunde existiert bereits."
+
+#: customer.pages.inc:178
+msgid "You want to delete %name"
+msgstr "Sie möchten %name löschen"
+
+#: customer.pages.inc:180
+msgid "Are you sure you want to delete the customer account %name?"
+msgstr "Möchten Sie wirklich das Kundenkonto für %name löschen?"
+
+#: customer.pages.inc:180
+msgid "This action cannot be undone."
+msgstr ""
+
+#: customer.pages.inc:182
+msgid "Cancel"
+msgstr ""
+
+#: customer.pages.inc:202
+msgid "The customer account %name has been deleted."
+msgstr "Das Kundenkonto für %name wurde gelöscht."
+
+#: customer.pages.inc:213
+msgid ""
+"There are no general settings for customers. You can manage fields and "
+"display settings here."
+msgstr ""
+"Es gibt keine allgemeinen Einstellungen für Kunden. Sie können hier Felder "
+"und Anzeigen verwalten."
+
+#: customer.pages.inc:228
+msgid "Show only items where"
+msgstr "Nur bestimmte Einträge zeigen"
+
+#: customer.pages.inc:233
+msgid "contains"
+msgstr "enthält"
+
+#: customer.pages.inc:242
+msgid "Filter"
+msgstr ""
+
+#: customer.pages.inc:248;329
+msgid "Reset"
+msgstr ""
+
+#: customer.pages.inc:264
+msgid "E-Mail"
+msgstr ""
+
+#: customer.pages.inc:274 customer.install:135
+msgid "Telephone number"
+msgstr "Telefonnummer"
+
+#: customer.pages.inc:284;311 customer.module:33;93
+msgid "Edit"
+msgstr ""
+
+#: customer.pages.inc:319
+msgid "Currently there are no customer informations."
+msgstr "Derzeit gibt es noch keine hinterlegten Informationen zu Kunden."
+
+#: customer.pages.inc:201
+msgid "customer"
+msgstr "Kunde"
+
+#:
+msgid "Customer"
+msgstr "Kunde"
+
+#:
+msgid "Customer account for @name"
+msgstr "Kundenkonto für @name"
+
+#:
+msgid "Type in an existing username. The owner is usually the user account of the customer. The owner can view and update his or her customer account."
+msgstr "Geben Sie einen im System vorhandenen Benutzernamen ein. Der Eigentümer ist normalerweise das zugehörige Benutzerkonto des Kunden. Der Eigentümer kann auf die Daten des Kundenkontos zugreifen und diese auch bearbeiten."
+
+#: customer.pages.inc:201
+msgid "Deleted the customer account %name."
+msgstr "Das Kundenkonto für %name wurde gelöscht."
+
+#: customer.module:138;149 customer.info:0
+msgid "Customer"
+msgstr ""
+
+#: customer.module:159
+msgid "Default"
+msgstr ""
+
+#: customer.module:163
+msgid "Administration"
+msgstr ""
+
+#: customer.module:183
+msgid "Customer ID"
+msgstr "Kundennummer"
+
+#: customer.module:187
+msgid "The unique customer ID."
+msgstr "Die eindeutige Kundennummer."
+
+#: customer.module:190
+msgid "Customer name"
+msgstr "Kundenname"
+
+#: customer.module:194
+msgid "The unique name of the customer."
+msgstr "Der eindeutige Name des Kunden."
+
+#: customer.module:197
+msgid "Date created"
+msgstr "Erstellungsdatum"
+
+#: customer.module:201
+msgid "The date the customer was created."
+msgstr "Das Datum an welchem der Kunde erstellt wurde."
+
+#: customer.module:204
+msgid "Date changed"
+msgstr "Änderungsdatum"
+
+#: customer.module:208
+msgid "The date the customer was most recently updated."
+msgstr "Das Datum an welchem der Kunde das Letzte Mal geändert wurde."
+
+#: customer.module:211
+msgid "Created by"
+msgstr "Erstellt von"
+
+#: customer.module:213
+msgid "The creator of the customer."
+msgstr "Der Ersteller des Kundenkontos."
+
+#: customer.module:218
+msgid "Changed by"
+msgstr "Geändert von"
+
+#: customer.module:220
+msgid "The user who recently changed informations about the customer."
+msgstr "Der Benutzer, welcher zuletzt das Kundenkonto geändert hat."
+
+#: customer.module:293
+msgid "Administer entity type customer"
+msgstr "Entität vom Typ Kunde verwalten"
+
+#: customer.module:294
+msgid "Allows users to manage the customer entity type settings."
+msgstr ""
+"Erlaubt Benutzern die Verwaltung der Einstellungen von Entitäten des Typs "
+"Kunde."
+
+#: customer.module:298
+msgid "Administer customers"
+msgstr "Kunden verwalten"
+
+#: customer.module:299
+msgid "Allows users to administer customer entities."
+msgstr "Erlaubt Benutzern die Verwaltung aller Kundenkonten."
+
+#: customer.module:303
+msgid "View customer informations"
+msgstr "Kundeninformationen einsehen"
+
+#: customer.module:304
+msgid "Allows users to view customer information pages."
+msgstr ""
+"Erlaubt Benutzern das Einsehen aller eingetragenen Kundeninformationen."
+
+#: customer.module:28;88
+msgid "View"
+msgstr ""
+
+#: customer.module:58
+msgid "Customers"
+msgstr "Kunden"
+
+#: customer.module:67
+msgid "Overview"
+msgstr "Übersicht"
+
+#: customer.module:116
+msgid "Customer configuration"
+msgstr "Kundenkonfiguration"
+
+#: customer.module:117
+msgid "Settings and configuration for customer entities."
+msgstr "Einstellungen und Konfigurationen für Entitäten vom Typ Kunde."
+
+#: customer.module:124
+msgid "Customer settings"
+msgstr "Kundeneinstellungen"
+
+#: customer.install:115
+msgid "Email address"
+msgstr "Email Adresse"
+
+#: customer.install:156
+msgid "Link to web page"
+msgstr "Link zur Webseite"
+
+#: customer.install:176
+msgid "Address"
+msgstr "Adresse"
+
+#: customer.info:0
+msgid "Manage customers."
+msgstr "Verwalte alle Kundenkonten."
+
+#: customer.info:0
+msgid "Business To Web Solutions"
+msgstr ""

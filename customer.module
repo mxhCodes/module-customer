@@ -1,0 +1,395 @@
+<?php
+
+/**
+ * @file
+ * Main module file for the customer module.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function customer_menu() {
+  $items = array();
+  
+  $uri = 'customer/%customer';
+  $id_pos = 1;
+  
+  // Standard pages.
+  $items[$uri] = array(
+    'title callback' => 'entity_label',
+    'title arguments' => array('customer', $id_pos),
+    'page callback' => 'customer_view_page',
+    'page arguments' => array($id_pos),
+    'access callback' => 'entity_access',
+    'access arguments' => array('view', 'customer', $id_pos),
+    'file' => 'customer.pages.inc',
+  );
+  $items[$uri . '/view'] = array(
+    'title' => 'View',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => -10,
+  );
+  $items[$uri . '/edit'] = array(
+    'title' => 'Edit',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('customer_form', $id_pos),
+    'access callback' => 'entity_access',
+    'access arguments' => array('update', 'customer', $id_pos),
+    'weight' => 10,
+    'type' => MENU_LOCAL_TASK,
+    'context' => MENU_CONTEXT_PAGE | MENU_CONTEXT_INLINE,
+    'file' => 'customer.pages.inc',
+  );
+  $items[$uri . '/delete'] = array(
+    'title' => 'Delete',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('customer_delete_confirm', $id_pos),
+    'access callback' => 'entity_access',
+    'access arguments' => array('delete', 'customer', $id_pos),
+    'weight' => 20,
+    'type' => MENU_LOCAL_TASK,
+    'context' => MENU_CONTEXT_PAGE | MENU_CONTEXT_INLINE,
+    'file' => 'customer.pages.inc',
+  );
+  
+  // Admin pages.
+  $id_pos++;
+  $items['admin/customers'] = array(
+    'title' => 'Customers',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('customer_admin_overview'),
+    'access arguments' => array('view customer entities'),
+    'file' => 'customer.pages.inc',
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => 100,
+    'menu_name' => 'main-menu',
+  );
+  $items['admin/customers/view'] = array(
+    'title' => 'Overview',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => 10,
+  );
+  $items['admin/customers/new-customer'] = array(
+    'title' => 'Add new customer',
+    'page callback' => 'customer_create_page',
+    'access arguments' => array('administer customer entities'),
+    'file' => 'customer.pages.inc',
+    'type' => MENU_LOCAL_ACTION,
+    'weight' => 10,
+  );
+
+  $items['admin/' . $uri] = array(
+    'title callback' => 'entity_label',
+    'title arguments' => array('customer', $id_pos),
+    'page callback' => 'customer_admin_view_page',
+    'page arguments' => array($id_pos),
+    'access arguments' => array('view customer entities'),
+    'file' => 'customer.pages.inc',
+  );
+  $items['admin/' . $uri . '/view'] = array(
+    'title' => 'View',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => -10,
+  );
+  $items['admin/' . $uri . '/edit'] = array(
+    'title' => 'Edit',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('customer_admin_form', $id_pos),
+    'access arguments' => array('administer customer entities'),
+    'weight' => 10,
+    'type' => MENU_LOCAL_TASK,
+    'context' => MENU_CONTEXT_PAGE | MENU_CONTEXT_INLINE,
+    'file' => 'customer.pages.inc',
+  );
+  $items['admin/' . $uri . '/delete'] = array(
+    'title' => 'Delete',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('customer_admin_delete_confirm', $id_pos),
+    'access callback' => 'entity_access',
+    'access arguments' => array('delete', 'customer', $id_pos),
+    'weight' => 20,
+    'type' => MENU_LOCAL_TASK,
+    'context' => MENU_CONTEXT_PAGE | MENU_CONTEXT_INLINE,
+    'file' => 'customer.pages.inc',
+  );
+  
+  // Customer entity configuration pages.
+  $items['admin/structure/customer'] = array(
+    'title' => 'Customer configuration',
+    'description' => 'Settings and configuration for customer entities.',
+    'page callback' => 'customer_settings',
+    'access arguments' => array('administer entity type customer'),
+    'file' => 'customer.pages.inc',
+    'weight' => 10,
+  );
+  $items['admin/structure/customer/settings'] = array(
+    'title' => 'Customer settings',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => 10,
+  );
+  
+  return $items;
+}
+
+/**
+ * Implements hook_entity_info().
+ */
+function customer_entity_info() {
+  return array(
+    'customer' => array(
+      'label' => t('Customer'),
+      'entity class' => 'Customer',
+      'controller class' => 'CustomerController',
+      'base table' => 'customer',
+      'fieldable' => TRUE,
+      'uuid' => TRUE,
+      'entity keys' => array(
+        'id' => 'customer_id',
+        'label' => 'name',
+        'uuid' => 'uuid',
+      ),
+      'bundles' => array(
+        'customer' => array(
+          'label' => t('Customer'),
+          'admin' => array(
+            'path' => 'admin/structure/customer',
+            'access arguments' => array('administer entity type customer'),
+          ),
+        ),
+      ),
+      'load hook' => 'customer_load',
+      'view modes' => array(
+        'full' => array(
+          'label' => t('Default'),
+          'custom settings' => FALSE,
+        ),
+        'administration' => array(
+          'label' => t('Administration'),
+          'custom settings' => FALSE,
+        ),
+      ),
+      'label callback' => 'entity_class_label',
+      'uri callback' => 'entity_class_uri',
+      'module' => 'customer',
+      'access callback' => 'customer_access',
+    ),
+  );
+}
+
+/**
+ * Implements hook_entity_property_info().
+ */
+function customer_entity_property_info() {
+  $info = array();
+  $properties = &$info['customer']['properties'];
+  
+  $properties['customer_id'] = array(
+    'label' => t('Customer ID'), 
+    'type' => 'integer', 
+    'schema field' => 'customer_id',
+    'required' => TRUE,
+    'description' => t('The unique customer ID.'),
+  );
+  $properties['name'] = array(
+    'label' => t('Customer name'),
+    'type' => 'text',
+    'schema field' => 'name',
+    'required' => TRUE,
+    'description' => t('The unique name of the customer.'),
+  );
+  $properties['created'] = array(
+    'label' => t('Date created'),
+    'type' => 'date',
+    'schema field' => 'created',
+    'required' => TRUE,
+    'description' => t('The date the customer was created.'),
+  );
+  $properties['changed'] = array(
+    'label' => t('Date changed'),
+    'type' => 'date',
+    'schema field' => 'changed',
+    'required' => TRUE,
+    'description' => t('The date the customer was most recently updated.'),
+  );
+  $properties['uid_created'] = array(
+    'label' => t('Created by'),
+    'type' => 'user',
+    'description' => t('The creator of the customer.'),
+    'required' => TRUE,
+    'schema field' => 'uid_created',
+  );
+  $properties['uid_changed'] = array(
+    'label' => t('Changed by'),
+    'type' => 'user',
+    'description' => t('The user who recently changed informations about the customer.'),
+    'required' => TRUE,
+    'schema field' => 'uid_changed',
+  );
+  $properties['uid_owner'] = array(
+    'label' => t('Owner'),
+    'type' => 'user',
+    'description' => t('The user who owns this customer account.'),
+    'required' => TRUE,
+    'schema field' => 'uid_owner',
+  );
+  
+  return $info;
+}
+
+/**
+ * Load multiple customer objects.
+ */
+function customer_load_multiple($customer_ids = array(), $conditions = array(), $reset = FALSE) {
+  return entity_load('customer', $customer_ids, $conditions, $reset);
+}
+
+/**
+ * Load a single customer object.
+ */
+function customer_load($customer_id = NULL, $reset = FALSE) {
+  $customer_ids = (isset($customer_id) ? array($customer_id) : array());
+  $customer = customer_load_multiple($customer_ids, array(), $reset);
+  return $customer ? reset($customer) : FALSE;
+}
+
+/**
+ * Save customer.
+ */
+function customer_save($customer) {
+  entity_save('customer', $customer);
+}
+
+/**
+ * Delete customer.
+ */
+function customer_delete($customer_id) {
+  entity_delete('customer', $customer_id);
+}
+
+/**
+ * Delete multiple customers.
+ */
+function customer_delete_multiple($customer_ids) {
+  entity_delete_multiple('customer', $customer_ids);
+}
+
+/**
+ * Returns a customer object by name.
+ *
+ * @param $name
+ *  A string containing the name of the customer.
+ * @param $operator (optional)
+ *  A string which determines how to fetch the is. Default is =.
+ *
+ * @return
+ *  A customer object, FALSE if no customer was found for this name.
+ */
+function customer_get_by_name($name, $operator = '=') {
+  $id = customer_id_by_name($name, $operator);
+  return $id ? customer_load($id) : FALSE;
+}
+
+/**
+ * Get multiple customer objects by names.
+ *
+ * @param $names
+ *  An array or string which contains some names as values.
+ * @param $operator (optional)
+ * A string which determines how to fetch the is. Default is =.
+ *
+ * @return
+ *  An array containing the found customer objects. FALSE otherwise.
+ */
+function customer_get_by_name_multiple($names, $operator = '=') {
+  $ids = customer_id_by_name_multiple($names, $operator);
+  return $ids ? customer_load_multiple($ids) : FALSE;
+}
+
+/**
+ * Get a single customer id by name.
+ *
+ * @param $name
+ *  A string containing the name of the customer.
+ * @param $operator (optional)
+ *  A string which determines how to fetch the is. Default is =.
+ *
+ * @return
+ *  The id of the customer, FALSE if no id for this name was found.
+ */
+function customer_id_by_name($name, $operator = '=') {
+  $ids = customer_id_by_name_multiple($name, $operator);
+  return !empty($ids) ? reset($ids) : FALSE;
+}
+
+/** 
+ * Get an array of customer ids.
+ *
+ * @param $names
+ *  An array or string which contains some names as values.
+ * @param $operator (optional)
+ *  A string which determines how to fetch the ids. Default is =.
+ *
+ * @return
+ *  An array containing the ids as values, FALSE if no ids were found.
+ */
+function customer_id_by_name_multiple($names, $operator = '=') {
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'customer')
+    ->propertyCondition('name', $names, $operator)
+    ->addMetaData('account', user_load(1));
+  $result = $query->execute();
+  return !empty($result) ? array_keys($result['customer']) : FALSE;
+}
+
+/**
+ * Access callback. Determines whether the user has access to the customer object.
+ */
+function customer_access($op, $customer = NULL, $account = NULL) {
+  global $user;
+  $is_owner = FALSE;
+  if (!isset($account)) {
+    $account = $user;
+  }
+  if (isset($customer)) {
+    if ($customer->uid_owner) {
+      $is_owner = ($customer->uid_owner == $account->uid);
+    }
+  }
+  switch ($op) {
+    case 'view':
+      return $is_owner
+        || user_access('view customer entities', $account)
+        || user_access('administer customer entities', $account);
+    case 'update':
+      return $is_owner
+        || user_access('administer customer entities', $account);
+    case 'create':
+    case 'delete':
+      return user_access('administer customer entities', $account);
+    default:
+      return FALSE;
+  }
+}
+
+/**
+ * Implements hook_permission().
+ */
+function customer_permission() {
+  return array(
+    'administer entity type customer' => array(
+      'title' => t('Administer entity type customer'),
+      'description' => t('Allows users to manage the customer entity type settings.'),
+      'restrict access' => TRUE,
+    ),
+    'administer customer entities' => array(
+      'title' => t('Administer customers'),
+      'description' => t('Allows users to administer customer entities.'),
+      'restrict access' => TRUE,
+    ),
+    'view customer entities' => array(
+      'title' => t('View customer informations'),
+      'description' => t('Allows users to view customer information pages.'),
+      'restrict access' => FALSE,
+    ),
+  );
+}
